@@ -334,9 +334,39 @@
     appendLog('USER', `Instantiated fresh context container record: ${idStr} directly allocated into BACKLOG.`);
   });
 
+    // --- REAL DURABILITY CHAOS TEST ---
   btnInjectChaos.addEventListener('click', () => {
-    appendLog('USER', 'Forcing Out-Of-Interval Chaos Intervention Command Route...');
-    executeGammaLoop();
+    appendLog('USER', '⚡ CRITICAL CHAOS INJECTION: Simulating a Core Worker Failure...');
+    
+    // 1. Completely kill Agent Alpha's automated processing loop
+    if (alphaIntervalId) {
+      clearInterval(alphaIntervalId);
+      alphaIntervalId = null;
+      appendLog('GAMMA', '🚨 ALERT: AGENT_ALPHA thread has suffered a critical crash and stopped processing!');
+    }
+    
+    // 2. Break the visual heartbeat monitor for Alpha to show it is offline
+    trackAlpha.textContent = "CRASHED [X_X]";
+    trackAlpha.style.color = "#F85149";
+
+    // 3. Flood the Backlog with 5 sudden tasks to see if the system can cope
+    appendLog('USER', '⚠️ SYSTEM STRESS: 5 new tasks incoming during worker outage...');
+    for (let i = 1; i <= 5; i++) {
+      const idStr = `TASK-STRESS-${i}`;
+      tasks.push({
+        id: idStr,
+        title: `High-Stress Outage Telemetry Task ${idStr}`,
+        lane: 'BACKLOG',
+        version: 1,
+        lastModifiedBy: 'USER',
+        timestamp: Date.now()
+      });
+    }
+
+    // 4. Force the board to redraw so we can watch what happens live
+    renderBoard();
+  });
+
   });
 
   Object.keys(filters).forEach(key => {
