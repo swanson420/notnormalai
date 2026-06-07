@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Dispatch & Task Management System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ROLE 1: ADMIN (COMPANY OWNER) DESKTOP INTERFACE -->
+    <div id="role-admin" class="role-container active">
+      <div class="desktop-layout">
+        <aside class="sidebar">
+          <div class="sidebar-brand">FRED Admin</div>
+          <nav>
+            <ul class="nav-list">
+              <li class="nav-item active"><a href="#hub">The Hub</a></li>
+              <li class="nav-item"><a href="#permissions">Permissions Matrix</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <main class="main-content">
+          <header class="app-header">
+            <h1>Operational Analytics Dashboard</h1>
+            <div class="user-profile">Admin Portal</div>
+          </header>
+
+          <section id="hub" class="analytics-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Total Active Jobs</div>
+              <div class="kpi-value">42</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Completed Today</div>
+              <div class="kpi-value">128</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Average Completion Time (T<sub>comp</sub>)</div>
+              <div class="kpi-value">24.5m</div>
+            </div>
+          </section>
+
+          <section class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Worker Name</th>
+                  <th>Velocity Index</th>
+                  <th>Completion Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Worker Alpha</td>
+                  <td>94%</td>
+                  <td>98.2%</td>
+                </tr>
+                <tr>
+                  <td>Worker Beta</td>
+                  <td>89%</td>
+                  <td>95.1%</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section id="permissions" class="table-container">
+            <header class="mb-4">
+              <h2>Organization & Permissions Matrix</h2>
+            </header>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>User Role</th>
+                  <th>Granular Access Assignment</th>
+                  <th>Billing Scope</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Manager / Dispatcher</td>
+                  <td>Pipeline Management, Manual Overrides</td>
+                  <td>Read-Only</td>
+                </tr>
+                <tr>
+                  <td>Admin Owner</td>
+                  <td>Full Systems Access, Global Settings</td>
+                  <td>Write / Edit Billing</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- ROLE 2: DISPATCHER (OPERATIONS MANAGER) SPLIT-SCREEN LAYOUT -->
+    <div id="role-dispatcher" class="role-container">
+      <div class="desktop-layout">
+        <aside class="sidebar">
+          <div class="sidebar-brand">FRED Dispatch</div>
+          <nav>
+            <ul class="nav-list">
+              <li class="nav-item active"><a href="#command-center">Command Center</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <main class="main-content">
+          <header class="app-header">
+            <h1>The Command Center</h1>
+            <div class="user-profile">Operations Panel</div>
+          </header>
+
+          <div class="command-center">
+            <!-- Left Column: The Pipeline -->
+            <section class="kanban-column">
+              <div class="kanban-header">The Pipeline</div>
+              <div class="kanban-tasks">
+                <div class="task-card">
+                  <h4>Unassigned Pipeline Item</h4>
+                  <span class="badge badge-outline">UNASSIGNED</span>
+                </div>
+                <div class="task-card">
+                  <h4>Active Pipeline Item</h4>
+                  <span class="badge badge-secondary">ASSIGNED</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- Center Column: Live Map Area -->
+            <section class="map-view-pane">
+              <!-- Render Mock Map Elements via Coordinate Overlays -->
+              <div class="map-markers" style="padding: 1rem;">
+                <p class="mb-4">Live Map Visualization Viewport</p>
+                <div>Worker Status Markers:</div>
+                <span class="badge">Available 🟢</span>
+                <span class="badge">Busy 🟡</span>
+                <span class="badge">Offline 🔴</span>
+              </div>
+            </section>
+
+            <!-- Right Column: Contextual Control Panel -->
+            <section class="detail-panel">
+              <h3>Contextual Control & Override</h3>
+              <div class="control-box mt-4">
+                <label for="manual-worker-select">Manual Proximity Assignment</label>
+                <select id="manual-worker-select" class="form-select">
+                  <option>Worker Alpha (0.8 mi away)</option>
+                  <option>Worker Beta (1.4 mi away)</option>
+                </select>
+                <button class="btn btn-primary w-full">Execute Manual Route</button>
+              </div>
+              <hr style="border-color: var(--border-color); margin: 1.5rem 0;">
+              <div class="control-box">
+                <label>Autonomous Systems Engine</label>
+                <button id="auto-assign-trigger" class="btn btn-primary w-full mt-4">Execute Optimization Algorithm</button>
+                <div id="auto-assign-loader" class="skeleton mt-4 hidden" style="height: 48px; width: 100%;"></div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ROLE 3: WORKER (FIELD OPERATIONS) MOBILE WORKSPACE -->
+    <div id="role-worker" class="role-container">
+      <div class="mobile-viewport">
+        <!-- Persistent Status Header Context -->
+        <header class="status-banner">
+          <button class="status-toggle active">Available 🟢</button>
+          <button class="status-toggle">Busy 🟡</button>
+          <button class="status-toggle">Offline 🔴</button>
+        </header>
+
+        <!-- Dynamic Incoming Job Overlay Target Container -->
+        <div id="job-modal-takeover" class="modal-takeover hidden">
+          <h2>High Priority Incoming Task Assignment</h2>
+          <div class="mt-4">
+            <p><strong>Job Title:</strong> Critical Transit Infrastructure Repair</p>
+            <p><strong>Distance Vector:</strong> 1.2 Miles</p>
+            <p><strong>Priority Parameter:</strong> High Emergency</p>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-success">Accept</button>
+            <button class="btn btn-danger">Reject</button>
+          </div>
+        </div>
+
+        <!-- Primary Execution Path Viewport Layout Area -->
+        <main class="mobile-content">
+          <div class="map-route-snippet mb-4" style="background: var(--bg-surface); padding: 1rem; border-radius: 0.5rem; height: 120px;">
+            <p class="text-secondary" style="font-size: 0.875rem;">Navigation Routing Viewport Data</p>
+            <button class="btn btn-primary w-full mt-4" style="min-height: 36px;">Launch External Navigation System</button>
+          </div>
+
+          <div class="execution-card" style="background: var(--bg-surface); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+            <h3>Active Task Execution Context</h3>
+            <p class="text-secondary mb-4" style="font-size: 0.875rem;">Awaiting Route Dispatch Initialization</p>
+            
+            <button id="primary-state-mutation-trigger" class="btn btn-primary w-full">Slide to Start Journey</button>
+
+            <div class="proof-of-completion-zone mt-4">
+              <label style="display: block; font-size: 0.875rem; margin-bottom: 0.5rem;">Proof of Execution Protocol</label>
+              <input type="file" class="form-input" accept="image/*">
+              <textarea class="form-input" placeholder="Execution notes..."></textarea>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="main.js"></script>
+</body>
+                                                                              </html>
+                                                                              
