@@ -2,55 +2,50 @@
    1. VARIABLES
    ========================================================================== */
 :root {
-  /* Color Palette - Real-Time Dashboard System */
-  --bg-main: #0b0f19;
-  --bg-surface: #131a2c;
-  --bg-surface-hover: #1c263f;
-  --border-color: #1e293b;
+  --bg-main: #0D1117;
+  --bg-panel: #161B22;
+  --border-dim: #30363D;
   
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-
-  --clr-brand: #0072f5;
-  --clr-success: #10b981;
-  --clr-warning: #f59e0b;
-  --clr-destructive: #ef4444;
-  --clr-purple: #8b5cf6;
-
-  /* Typography */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --actor-user: #58A6FF;
+  --actor-alpha: #56D364;
+  --actor-beta: #E3B341;
+  --actor-gamma: #F85149;
   
-  /* Layout Sizing */
-  --sidebar-width: 260px;
-  --panel-width: 360px;
-  --touch-target-min: 48px;
+  --text-main: #C9D1D9;
+  --text-muted: #8B949E;
+  
+  --font-mono: SFMono-Regular, Consolas, "Liberation Mono", MenLO, Courier New, monospace;
 }
 
 /* ==========================================================================
-   2. RESET / BASE
+   2. RESET/BASE
    ========================================================================== */
-*, *::before, *::after {
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
-  height: 100%;
-  font-family: var(--font-sans);
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   background-color: var(--bg-main);
-  color: var(--text-primary);
-  overflow-x: hidden;
-  line-height: 1.5;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
-button, input, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  background: none;
+button {
+  font-family: var(--font-mono);
+  cursor: pointer;
   border: none;
+  background: none;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
 }
 
 /* ==========================================================================
@@ -58,353 +53,345 @@ button, input, select, textarea {
    ========================================================================== */
 .app-container {
   display: flex;
+  flex-direction: column;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 }
 
-/* Layout Roles */
-.role-container {
-  display: none; /* Controlled via template/routing setup logic externally */
-  width: 100%;
-  height: 100%;
-}
-
-.role-container.active {
+.top-header {
   display: flex;
-}
-
-/* Master Grid Systems */
-.desktop-layout {
-  display: flex;
-  width: 100%;
-  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border-dim);
+  font-weight: bold;
 }
 
 .main-content {
+  display: flex;
   flex: 1;
+  height: calc(100vh - 48px);
+  overflow: hidden;
+}
+
+.panel-controls {
+  flex: 0 0 20%;
+  min-width: 280px;
+  max-width: 350px;
+  background-color: var(--bg-main);
+  border-right: 1px solid var(--border-dim);
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow-y: auto;
 }
 
-/* Split-Screen Command Center Layout */
-.command-center {
-  display: grid;
-  grid-template-columns: var(--panel-width) 1fr var(--panel-width);
-  height: 100%;
-  width: 100%;
+.panel-board {
+  flex: 1 1 auto;
+  background-color: var(--bg-main);
+  display: flex;
   overflow: hidden;
 }
 
-/* Mobile App Viewport Framework */
-.mobile-viewport {
-  width: 100%;
-  max-width: 430px;
-  margin: 0 auto;
-  height: 100%;
+.panel-logs {
+  flex: 0 0 25%;
+  min-width: 320px;
+  max-width: 420px;
   background-color: var(--bg-main);
+  border-left: 1px solid var(--border-dim);
   display: flex;
   flex-direction: column;
-  position: relative;
   overflow: hidden;
-  border-left: 1px solid var(--border-color);
-  border-right: 1px solid var(--border-color);
 }
 
 /* ==========================================================================
    4. COMPONENTS
    ========================================================================== */
 
-/* Navigation & Sidebar */
-.sidebar {
-  width: var(--sidebar-width);
-  background-color: var(--bg-surface);
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem;
+/* Left Control Panel */
+.control-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-dim);
 }
 
-.sidebar-brand {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 2rem;
+.control-section h3 {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
 }
 
-.nav-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.nav-item a {
-  display: block;
-  padding: 0.75rem 1rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  border-radius: 0.375rem;
-}
-
-.nav-item.active a, .nav-item a:hover {
-  background-color: var(--bg-surface-hover);
-  color: var(--text-primary);
-}
-
-/* Header */
-.app-header {
-  height: 64px;
-  background-color: var(--bg-surface);
-  border-bottom: 1px solid var(--border-color);
+.btn-toggle-sim {
+  width: 100%;
+  padding: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 1.5rem;
+  justify-content: center;
+  gap: 8px;
 }
 
-/* Cards & Grid Metric Widgets */
-.analytics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  padding: 1.5rem;
+.btn-toggle-sim.stopped {
+  background-color: #238636;
 }
 
-.kpi-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  padding: 1.5rem;
+.btn-toggle-sim.running {
+  background-color: #DA3633;
+  animation: borderPulse 1.5s infinite ease-in-out;
 }
 
-.kpi-label {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
-}
-
-.kpi-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-/* Data Tables */
-.table-container {
-  padding: 0 1.5rem 1.5rem 1.5rem;
-}
-
-.data-table {
+.btn-reset-sim {
   width: 100%;
-  border-collapse: collapse;
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
+  padding: 8px;
+  color: var(--text-main);
+  border: 1px solid var(--border-dim);
+  text-transform: uppercase;
+  font-size: 11px;
+  transition: background-color 0.2s;
+}
+
+.btn-reset-sim:hover {
+  background-color: rgba(218, 54, 51, 0.2);
+}
+
+.btn-mutate-add {
+  width: 100%;
+  padding: 8px;
+  color: var(--actor-user);
+  border: 1px solid var(--actor-user);
+  text-transform: uppercase;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.btn-mutate-chaos {
+  width: 100%;
+  padding: 8px;
+  color: var(--actor-gamma);
+  border: 1px dashed var(--actor-gamma);
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.heartbeat-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+
+.heartbeat-label {
+  width: 120px;
+}
+
+.heartbeat-track {
+  flex: 1;
+  background-color: #21262D;
+  height: 12px;
+  font-size: 9px;
+  line-height: 12px;
+  letter-spacing: 0px;
+  color: var(--text-muted);
   overflow: hidden;
-  text-align: left;
+  white-space: nowrap;
 }
 
-.data-table th, .data-table td {
-  padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
+/* Kanban Board Columns */
+.board-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-dim);
+  overflow: hidden;
 }
 
-.data-table th {
-  background-color: var(--bg-surface-hover);
-  color: var(--text-secondary);
-  font-size: 0.875rem;
+.board-column:last-child {
+  border-right: none;
+}
+
+.column-header {
+  height: 48px;
+  padding: 0 12px;
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border-dim);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column-title {
+  font-weight: bold;
   text-transform: uppercase;
 }
 
-/* Kanban System */
-.kanban-column {
-  background-color: var(--bg-surface);
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.column-badge {
+  color: var(--text-muted);
 }
 
-.kanban-header {
-  padding: 1rem;
-  font-weight: 600;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.kanban-tasks {
+.column-cards-container {
   flex: 1;
+  padding: 8px;
   overflow-y: auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  overflow-x: hidden;
 }
 
+/* Task Cards */
 .task-card {
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 0.375rem;
-  padding: 1rem;
-  cursor: pointer;
-}
-
-/* Detail Panels */
-.detail-panel {
-  background-color: var(--bg-surface);
-  border-left: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
-  padding: 1.5rem;
-}
-
-/* Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  border: 1px solid transparent;
-}
-
-.badge-outline { border-color: var(--text-muted); color: var(--text-secondary); }
-.badge-secondary { background-color: rgba(0, 114, 245, 0.15); color: var(--clr-brand); }
-.badge-warning { background-color: rgba(245, 158, 11, 0.15); color: var(--clr-warning); }
-.badge-destructive { background-color: rgba(139, 92, 246, 0.15); color: var(--clr-purple); }
-.badge-success { background-color: rgba(16, 185, 129, 0.15); color: var(--clr-success); }
-
-/* Buttons & Inputs */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  min-height: var(--touch-target-min);
-  min-width: var(--touch-target-min);
-}
-
-.btn-primary { background-color: var(--clr-brand); color: white; }
-.btn-success { background-color: var(--clr-success); color: white; }
-.btn-danger { background-color: var(--clr-destructive); color: white; }
-
-.form-select, .form-input {
-  width: 100%;
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 0.375rem;
-  padding: 0.75rem;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-}
-
-/* Mobile UI Elements */
-.status-banner {
-  display: flex;
-  justify-content: space-around;
-  background-color: var(--bg-surface);
-  border-bottom: 1px solid var(--border-color);
-  padding: 0.75rem;
-}
-
-.status-toggle {
-  flex: 1;
-  text-align: center;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.status-toggle.active {
-  background-color: var(--bg-surface-hover);
-}
-
-.mobile-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-}
-
-/* Modals */
-.modal-takeover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(11, 15, 25, 0.95);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem;
-}
-
-.modal-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-/* Map Interface Elements */
-.map-view-pane {
-  background-color: #1e2538;
-  width: 100%;
-  height: 100%;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  padding: 12px;
+  margin-bottom: 8px;
   position: relative;
+  transition: border-color 0.3s;
+}
+
+.task-card.user-lock { border-color: var(--actor-user); }
+.task-card.alpha-lock { border-color: var(--actor-alpha); }
+.task-card.beta-lock { border-color: var(--actor-beta); }
+.task-card.gamma-lock { border-color: var(--actor-gamma); }
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.card-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.card-version {
+  font-size: 11px;
+  color: #FFFFFF;
+  background-color: #21262D;
+  padding: 2px 4px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-main);
+  margin: 8px 0;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+.card-badge {
+  font-weight: 600;
+  padding: 2px 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: #21262D;
+}
+
+.card-badge.user-owned { color: var(--actor-user); }
+.card-badge.alpha-owned { color: var(--actor-alpha); }
+.card-badge.beta-owned { color: var(--actor-beta); }
+.card-badge.gamma-owned { color: var(--actor-gamma); }
+
+.card-timestamp {
+  color: var(--text-muted);
+}
+
+/* Log Stream Panel */
+.log-filter-bar {
+  height: 54px;
+  padding: 0 12px;
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border-dim);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.log-stream-container {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  border-left-width: 3px;
+  padding: 8px;
+  font-size: 11px;
+}
+
+.log-card.user-log { border-left-color: var(--actor-user); }
+.log-card.alpha-log { border-left-color: var(--actor-alpha); }
+.log-card.beta-log { border-left-color: var(--actor-beta); }
+.log-card.gamma-log { border-left-color: var(--actor-gamma); }
+
+.log-top {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.log-msg {
+  color: var(--text-main);
+}
+
+/* Filter Behavior Classes */
+.hide-user .user-log,
+.hide-alpha .alpha-log,
+.hide-beta .beta-log,
+.hide-gamma .gamma-log {
+  display: none !important;
 }
 
 /* ==========================================================================
    5. UTILITIES
    ========================================================================== */
-.flex-1 { flex: 1; }
-.w-full { width: 100%; }
-.mt-4 { margin-top: 1rem; }
-.mb-4 { margin-bottom: 1rem; }
-.hidden { display: none !important; }
-
-/* Skeleton Loaders */
-.skeleton {
-  background: linear-gradient(90deg, #131a2c 25%, #1c263f 50%, #131a2c 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-  border-radius: 0.25rem;
-}
-
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+.flash-user { animation: flashUserAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
+.flash-alpha { animation: flashAlphaAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
+.flash-beta { animation: flashBetaAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
+.flash-gamma { animation: flashGammaAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
 
 /* ==========================================================================
-   6. MEDIA QUERIES (Mobile-first responsive configuration)
+   6. MEDIA QUERIES (Animations and Mobile Overrides)
    ========================================================================== */
-@media (max-width: 1279px) {
-  .desktop-layout {
-    flex-direction: column;
-  }
-  .command-center {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 400px auto;
-  }
-  .sidebar {
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .nav-list {
-    flex-direction: row;
-  }
+@keyframes borderPulse {
+  0% { border-color: rgba(218, 54, 51, 0.4); }
+  50% { border-color: rgba(218, 54, 51, 1); }
+  100% { border-color: rgba(218, 54, 51, 0.4); }
+}
+
+@keyframes flashUserAnim {
+  0% { background-color: rgba(88, 166, 255, 0.35); }
+  100% { background-color: var(--bg-panel); }
+}
+@keyframes flashAlphaAnim {
+  0% { background-color: rgba(86, 211, 100, 0.35); }
+  100% { background-color: var(--bg-panel); }
+}
+@keyframes flashBetaAnim {
+  0% { background-color: rgba(227, 179, 65, 0.35); }
+  100% { background-color: var(--bg-panel); }
+}
+@keyframes flashGammaAnim {
+  0% { background-color: rgba(248, 81, 73, 0.35); }
+  100% { background-color: var(--bg-panel); }
 }
