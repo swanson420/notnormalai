@@ -4,460 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WD1-G-FRED // Multi-Agent Task Board System</title>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@0.321.0/dist/umd/lucide.min.js"></script>
-    <style>
-        :root {
-            --bg-main: #0a0b10;
-            --bg-card: #121420;
-            --bg-panel: #16192b;
-            --border: #262b4c;
-            --text-main: #f1f5f9;
-            --text-muted: #64748b;
-            --accent-alpha: #3b82f6;
-            --accent-beta: #10b981;
-            --accent-gamma: #ec4899;
-            --accent-user: #eab308;
-            --status-backlog: #6366f1;
-            --status-progress: #0ea5e9;
-            --status-review: #f59e0b;
-            --status-done: #10b981;
-            --font: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            font-family: var(--font);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        header {
-            background-color: var(--bg-panel);
-            border-bottom: 2px solid var(--border);
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-badge {
-            background: linear-gradient(135deg, var(--accent-alpha), var(--accent-gamma));
-            color: #fff;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-        }
-
-        h1 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #ef4444;
-        }
-
-        .status-indicator.active {
-            background-color: #22c55e;
-            box-shadow: 0 0 8px #22c55e;
-        }
-
-        .main-layout {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 320px 1fr 360px;
-            height: calc(100vh - 62px);
-            overflow: hidden;
-        }
-
-        /* Panels Shared Layout */
-        .panel {
-            background-color: var(--bg-panel);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .left-panel {
-            border-right: 2px solid var(--border);
-        }
-
-        .right-panel {
-            border-left: 2px solid var(--border);
-        }
-
-        .panel-header {
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-
-        .panel-content {
-            padding: 1.25rem;
-            overflow-y: auto;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        /* Form & Control Groups */
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-        }
-
-        .btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 0.65rem 1rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .btn:hover {
-            background-color: var(--border);
-            border-color: #3b82f6;
-        }
-
-        .btn-primary {
-            background-color: var(--accent-alpha);
-            border-color: transparent;
-        }
-
-        .btn-primary:hover {
-            background-color: #2563eb;
-        }
-
-        .btn-danger {
-            background-color: #991b1b;
-            border-color: transparent;
-        }
-
-        .btn-danger:hover {
-            background-color: #b91c1c;
-        }
-
-        .btn-chaos {
-            background: linear-gradient(135deg, #7c3aed, var(--accent-gamma));
-            border: none;
-            color: white;
-            font-weight: 700;
-        }
-
-        .btn-chaos:hover {
-            opacity: 0.9;
-            box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
-        }
-
-        .btn-group-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-        }
-
-        input[type="text"], select {
-            background-color: var(--bg-main);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 0.65rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input[type="text"]:focus, select:focus {
-            border-color: var(--accent-alpha);
-        }
-
-        /* Agent Configuration Cards */
-        .agent-config-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 0.85rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .agent-config-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 4px;
-        }
-
-        .agent-alpha-card::before { background-color: var(--accent-alpha); }
-        .agent-beta-card::before { background-color: var(--accent-beta); }
-        .agent-gamma-card::before { background-color: var(--accent-gamma); }
-
-        .agent-config-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-
-        .agent-meta {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        /* Center Panel / Board */
-        .board-container {
-            background-color: var(--bg-main);
-            padding: 1.5rem;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            height: 100%;
-            overflow-x: auto;
-        }
-
-        .board-column {
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .column-header {
-            padding: 1rem;
-            border-bottom: 2px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .column-header .count-badge {
-            background-color: var(--bg-main);
-            border: 1px solid var(--border);
-            padding: 0.15rem 0.4rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .column-backlog { border-top: 3px solid var(--status-backlog); }
-        .column-progress { border-top: 3px solid var(--status-progress); }
-        .column-review { border-top: 3px solid var(--status-review); }
-        .column-done { border-top: 3px solid var(--status-done); }
-
-        .column-cards-container {
-            padding: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        /* Task Cards */
-        .task-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.2s;
-            position: relative;
-            animation: cardSpawn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-        }
-
-        @keyframes cardSpawn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .task-card:hover {
-            border-color: #475569;
-        }
-
-        .task-card-id {
-            font-family: monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .task-card-version {
-            background-color: var(--bg-main);
-            padding: 0.1rem 0.3rem;
-            border-radius: 4px;
-            border: 1px solid var(--border);
-            font-size: 0.7rem;
-        }
-
-        .task-card-title {
-            font-size: 0.9rem;
-            font-weight: 500;
-            line-height: 1.4;
-            color: var(--text-main);
-            word-break: break-word;
-        }
-
-        .task-card-meta {
-            border-top: 1px solid var(--border);
-            padding-top: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
-        /* High-Frequency Telemetry Log */
-        .log-stream {
-            background-color: var(--bg-main);
-            font-family: monospace;
-            font-size: 0.8rem;
-            padding: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .log-entry {
-            line-height: 1.4;
-            padding: 0.25rem;
-            border-radius: 4px;
-            border-left: 2px solid transparent;
-            animation: logSpawn 0.15s ease-out;
-        }
-
-        @keyframes logSpawn {
-            from { background-color: var(--border); }
-            to { background-color: transparent; }
-        }
-
-        .log-entry-timestamp {
-            color: #475569;
-            margin-right: 0.5rem;
-        }
-
-        .log-actor-ALPHA { border-left-color: var(--accent-alpha); background-color: rgba(59, 130, 246, 0.05); }
-        .log-actor-BETA { border-left-color: var(--accent-beta); background-color: rgba(16, 185, 129, 0.05); }
-        .log-actor-GAMMA { border-left-color: var(--accent-gamma); background-color: rgba(236, 72, 153, 0.05); }
-        .log-actor-USER { border-left-color: var(--accent-user); background-color: rgba(234, 179, 8, 0.05); }
-
-        .log-entry .badge {
-            padding: 0.05rem 0.25rem;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-right: 0.4rem;
-        }
-
-        .badge-ALPHA { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-        .badge-BETA { background-color: rgba(16, 185, 129, 0.2); color: #34d399; }
-        .badge-GAMMA { background-color: rgba(236, 72, 153, 0.2); color: #f472b6; }
-        .badge-USER { background-color: rgba(234, 179, 8, 0.2); color: #facc15; }
-
-        .log-msg-text {
-            color: #cbd5e1;
-        }
-        .log-target-id {
-            color: #60a5fa;
-            font-weight: bold;
-        }
-
-        /* Responsive Cover Overlays if needed */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-main);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <header>
+    <header class="header-navigation">
         <div class="logo-area">
             <span class="logo-badge">WD1-G-FRED</span>
-            <h1>Multi-Agent Task Board Simulation</h1>
+            <h1>Multi-Agent Task Board System</h1>
         </div>
         <div class="system-status">
             <div id="statusIndicator" class="status-indicator"></div>
@@ -466,44 +20,44 @@
     </header>
 
     <main class="main-layout">
+        <!-- LEFT PANEL: SIMULATION CONTROLS -->
         <section class="panel left-panel">
             <div class="panel-header">
-                <i data-lucide="sliders"></i> Simulation Controls
+                <h2>Simulation Controls</h2>
             </div>
             <div class="panel-content">
+                <!-- Engine Master Toggles -->
                 <div class="control-group">
-                    <label>Engine Switch</label>
+                    <span class="control-label">Engine Switch</span>
                     <div class="btn-group-row">
-                        <button id="btnStart" class="btn btn-primary"><i data-lucide="play"></i> Start</button>
-                        <button id="btnStop" class="btn" disabled><i data-lucide="square"></i> Stop</button>
+                        <button id="btnStart" class="btn btn-primary">Start</button>
+                        <button id="btnStop" class="btn" disabled>Stop</button>
                     </div>
                 </div>
 
+                <!-- Manual Task Injection -->
                 <div class="control-group">
-                    <label>Task Generator</label>
-                    <input type="text" id="inputTaskTitle" placeholder="Task description/title..." autocomplete="off">
-                    <button id="btnInjectTask" class="btn"><i data-lucide="plus-circle"></i> Append to Backlog</button>
+                    <span class="control-label">Task Generator</span>
+                    <input type="text" id="inputTaskTitle" class="input-field" placeholder="Task description/title..." autocomplete="off">
+                    <button id="btnInjectTask" class="btn">Append to Backlog</button>
                 </div>
 
+                <!-- Chaos Engineering Event Trigger -->
                 <div class="control-group">
-                    <label>Anomalous Disruptions</label>
-                    <button id="btnChaosTrigger" class="btn btn-chaos"><i data-lucide="zap"></i> Inject Manual Chaos</button>
+                    <span class="control-label">Anomalous Disruptions</span>
+                    <button id="btnChaosTrigger" class="btn btn-chaos">Inject Manual Chaos</button>
                 </div>
 
-                <div class="control-group" style="margin-top: auto;">
-                    <label>System Integrity</label>
-                    <button id="btnReset" class="btn btn-danger"><i data-lucide="refresh-cw"></i> Hard Reset System</button>
-                </div>
-
+                <!-- Agent Tuning Metas -->
                 <div class="control-group">
-                    <label>Agent Execution Intervals</label>
+                    <span class="control-label">Agent Execution Intervals</span>
                     
                     <div class="agent-config-card agent-alpha-card">
                         <div class="agent-config-header">
-                            <span style="color: var(--accent-alpha)">AGENT ALPHA (Speed)</span>
+                            <span class="u-text-alpha">AGENT ALPHA (Speed)</span>
                         </div>
-                        <div class="agent-meta">Directive: Backlog / InProgress → Next</div>
-                        <select id="speedIntervalSelect">
+                        <div class="agent-meta">Directive: S_n &rarr; S_n+1</div>
+                        <select id="speedIntervalSelect" class="select-dropdown">
                             <option value="1000">Interval: 1.0s</option>
                             <option value="2000" selected>Interval: 2.0s</option>
                             <option value="4000">Interval: 4.0s</option>
@@ -512,10 +66,10 @@
 
                     <div class="agent-config-card agent-beta-card">
                         <div class="agent-config-header">
-                            <span style="color: var(--accent-beta)">AGENT BETA (Correctness)</span>
+                            <span class="u-text-beta">AGENT BETA (Correctness)</span>
                         </div>
-                        <div class="agent-meta">Directive: Review Rejection (QA)</div>
-                        <select id="correctIntervalSelect">
+                        <div class="agent-meta">Directive: S_2 &rarr; S_1 Rejection</div>
+                        <select id="correctIntervalSelect" class="select-dropdown">
                             <option value="1500">Interval: 1.5s</option>
                             <option value="2500" selected>Interval: 2.5s</option>
                             <option value="5000">Interval: 5.0s</option>
@@ -524,82 +78,73 @@
 
                     <div class="agent-config-card agent-gamma-card">
                         <div class="agent-config-header">
-                            <span style="color: var(--accent-gamma)">AGENT GAMMA (Chaos)</span>
+                            <span class="u-text-gamma">AGENT GAMMA (Chaos)</span>
                         </div>
-                        <div class="agent-meta">Directive: Structural Mutations</div>
-                        <select id="chaosIntervalSelect">
+                        <div class="agent-meta">Directive: Disruption Mutation</div>
+                        <select id="chaosIntervalSelect" class="select-dropdown">
                             <option value="2000">Interval: 2.0s</option>
                             <option value="4000" selected>Interval: 4.0s</option>
                             <option value="8000">Interval: 8.0s</option>
                         </select>
                     </div>
                 </div>
+
+                <!-- System Reset -->
+                <div class="control-group" style="margin-top: auto;">
+                    <span class="control-label">System Integrity</span>
+                    <button id="btnReset" class="btn btn-danger">Hard Reset System</button>
+                </div>
             </div>
         </section>
 
+        <!-- CENTER PANEL: THE KANBAN BOARD -->
         <section class="board-container">
+            <!-- Backlog (S_0) -->
             <div class="board-column column-backlog">
                 <div class="column-header">
-                    <span>Backlog [S_0]</span>
-                    <span class="count-badge" id="count-Backlog">0</span>
+                    <span>Backlog (S_0)</span>
+                    <span id="count-Backlog" class="count-badge">0</span>
                 </div>
-                <div class="column-cards-container" id="col-Backlog"></div>
+                <div id="col-Backlog" class="column-cards-container"></div>
             </div>
 
+            <!-- In Progress (S_1) -->
             <div class="board-column column-progress">
                 <div class="column-header">
-                    <span>In Progress [S_1]</span>
-                    <span class="count-badge" id="count-In-Progress">0</span>
+                    <span>In Progress (S_1)</span>
+                    <span id="count-In-Progress" class="count-badge">0</span>
                 </div>
-                <div class="column-cards-container" id="col-In-Progress"></div>
+                <div id="col-In-Progress" class="column-cards-container"></div>
             </div>
 
+            <!-- Review (S_2) -->
             <div class="board-column column-review">
                 <div class="column-header">
-                    <span>Review [S_2]</span>
-                    <span class="count-badge" id="count-Review">0</span>
+                    <span>Review (S_2)</span>
+                    <span id="count-Review" class="count-badge">0</span>
                 </div>
-                <div class="column-cards-container" id="col-Review"></div>
+                <div id="col-Review" class="column-cards-container"></div>
             </div>
 
+            <!-- Done (S_3) -->
             <div class="board-column column-done">
                 <div class="column-header">
-                    <span>Done [S_3]</span>
-                    <span class="count-badge" id="count-Done">0</span>
+                    <span>Done (S_3)</span>
+                    <span id="count-Done" class="count-badge">0</span>
                 </div>
-                <div class="column-cards-container" id="col-Done"></div>
+                <div id="col-Done" class="column-cards-container"></div>
             </div>
         </section>
 
+        <!-- RIGHT PANEL: REAL-TIME TELEMETRY LOG -->
         <section class="panel right-panel">
             <div class="panel-header">
-                <i data-lucide="terminal"></i> Telemetry Logs
+                <h2>Real-Time Telemetry Log</h2>
             </div>
             <div id="logStream" class="log-stream"></div>
         </section>
     </main>
 
-    <script>
-        // --- SEED SELECTION DATA ---
-        const CHAOS_TITLES = [
-            "Refactor flux capacitor alignment metrics",
-            "Drop database tables for testing isolation guarantees",
-            "Inject asynchronous delays into reactive state tree",
-            "Polymorph design state schema configuration parameters",
-            "Optimize baseline garbage collection parameters",
-            "Patch zero-day pointer exploit in production environment"
-        ];
-
-        const INITIAL_TASKS = [
-            { id: "TASK-001", title: "Initialize architectural unified reducer pattern", status: "Backlog", timestamp: Date.now(), version: 1 },
-            { id: "TASK-002", title: "Establish deterministic mutation loops", status: "In-Progress", timestamp: Date.now(), version: 1 },
-            { id: "TASK-003", title: "Verify thread state race isolation logic", status: "Review", timestamp: Date.now(), version: 1 }
-        ];
-
-        // --- STATE DEEP IMMUTABILITY ENGINE ---
-        class ReactiveSystemStore {
-            constructor() {
-                this.state = {
-                    tasks: [],
-                    isEngineRunning: false,
-           
+    <script src="main.js"></script>
+</body>
+</html>
