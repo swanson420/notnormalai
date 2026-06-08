@@ -1,26 +1,23 @@
 /* ==========================================================================
-   1. VARIABLES
-   ========================================================================== */
+1. VARIABLES
+========================================================================== */
 :root {
   --bg-main: #0D1117;
   --bg-panel: #161B22;
   --border-dim: #30363D;
-  
   --actor-user: #58A6FF;
   --actor-alpha: #56D364;
   --actor-beta: #E3B341;
   --actor-gamma: #F85149;
-  
   --text-main: #C9D1D9;
   --text-muted: #8B949E;
-  
   --font-mono: SFMono-Regular, Consolas, "Liberation Mono", MenLO, Courier New, monospace;
 }
 
 /* ==========================================================================
-   2. RESET/BASE
-   ========================================================================== */
-* {
+2. RESET/BASE
+========================================================================== */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -49,8 +46,8 @@ input[type="checkbox"] {
 }
 
 /* ==========================================================================
-   3. LAYOUT SYSTEM
-   ========================================================================== */
+3. LAYOUT SYSTEM
+========================================================================== */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -106,10 +103,8 @@ input[type="checkbox"] {
 }
 
 /* ==========================================================================
-   4. COMPONENTS
-   ========================================================================== */
-
-/* Left Control Panel */
+4. COMPONENTS
+========================================================================== */
 .control-section {
   padding: 16px;
   border-bottom: 1px solid var(--border-dim);
@@ -136,14 +131,8 @@ input[type="checkbox"] {
   gap: 8px;
 }
 
-.btn-toggle-sim.stopped {
-  background-color: #238636;
-}
-
-.btn-toggle-sim.running {
-  background-color: #DA3633;
-  animation: borderPulse 1.5s infinite ease-in-out;
-}
+.btn-toggle-sim.stopped { background-color: #238636; }
+.btn-toggle-sim.running { background-color: #DA3633; animation: borderPulse 1.5s infinite ease-in-out; }
 
 .btn-reset-sim {
   width: 100%;
@@ -155,9 +144,7 @@ input[type="checkbox"] {
   transition: background-color 0.2s;
 }
 
-.btn-reset-sim:hover {
-  background-color: rgba(218, 54, 51, 0.2);
-}
+.btn-reset-sim:hover { background-color: rgba(218, 54, 51, 0.2); }
 
 .btn-mutate-add {
   width: 100%;
@@ -186,23 +173,17 @@ input[type="checkbox"] {
   font-size: 11px;
 }
 
-.heartbeat-label {
-  width: 120px;
-}
-
 .heartbeat-track {
   flex: 1;
   background-color: #21262D;
   height: 12px;
   font-size: 9px;
   line-height: 12px;
-  letter-spacing: 0px;
   color: var(--text-muted);
   overflow: hidden;
   white-space: nowrap;
 }
 
-/* Kanban Board Columns */
 .board-column {
   flex: 1;
   display: flex;
@@ -211,9 +192,7 @@ input[type="checkbox"] {
   overflow: hidden;
 }
 
-.board-column:last-child {
-  border-right: none;
-}
+.board-column:last-child { border-right: none; }
 
 .column-header {
   height: 48px;
@@ -225,23 +204,12 @@ input[type="checkbox"] {
   align-items: center;
 }
 
-.column-title {
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.column-badge {
-  color: var(--text-muted);
-}
-
 .column-cards-container {
   flex: 1;
   padding: 8px;
   overflow-y: auto;
-  overflow-x: hidden;
 }
 
-/* Task Cards */
 .task-card {
   background-color: var(--bg-panel);
   border: 1px solid var(--border-dim);
@@ -249,76 +217,6 @@ input[type="checkbox"] {
   margin-bottom: 8px;
   position: relative;
   transition: border-color 0.3s;
-}
-
-.task-card.user-lock { border-color: var(--actor-user); }
-.task-card.alpha-lock { border-color: var(--actor-alpha); }
-.task-card.beta-lock { border-color: var(--actor-beta); }
-.task-card.gamma-lock { border-color: var(--actor-gamma); }
-
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.card-id {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.card-version {
-  font-size: 11px;
-  color: #FFFFFF;
-  background-color: #21262D;
-  padding: 2px 4px;
-}
-
-.card-title {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-main);
-  margin: 8px 0;
-}
-
-.card-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 10px;
-  margin-top: 8px;
-}
-
-.card-badge {
-  font-weight: 600;
-  padding: 2px 6px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  background-color: #21262D;
-}
-
-.card-badge.user-owned { color: var(--actor-user); }
-.card-badge.alpha-owned { color: var(--actor-alpha); }
-.card-badge.beta-owned { color: var(--actor-beta); }
-.card-badge.gamma-owned { color: var(--actor-gamma); }
-
-.card-timestamp {
-  color: var(--text-muted);
-}
-
-/* Log Stream Panel */
-.log-filter-bar {
-  height: 54px;
-  padding: 0 12px;
-  background-color: var(--bg-panel);
-  border-bottom: 1px solid var(--border-dim);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 11px;
 }
 
 .log-stream-container {
@@ -330,68 +228,17 @@ input[type="checkbox"] {
   gap: 8px;
 }
 
-.log-card {
-  background-color: var(--bg-panel);
-  border: 1px solid var(--border-dim);
-  border-left-width: 3px;
-  padding: 8px;
-  font-size: 11px;
-}
-
-.log-card.user-log { border-left-color: var(--actor-user); }
-.log-card.alpha-log { border-left-color: var(--actor-alpha); }
-.log-card.beta-log { border-left-color: var(--actor-beta); }
-.log-card.gamma-log { border-left-color: var(--actor-gamma); }
-
-.log-top {
-  display: flex;
-  justify-content: space-between;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-}
-
-.log-msg {
-  color: var(--text-main);
-}
-
-/* Filter Behavior Classes */
-.hide-user .user-log,
-.hide-alpha .alpha-log,
-.hide-beta .beta-log,
-.hide-gamma .gamma-log {
-  display: none !important;
-}
-
 /* ==========================================================================
-   5. UTILITIES
-   ========================================================================== */
-.flash-user { animation: flashUserAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
-.flash-alpha { animation: flashAlphaAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
-.flash-beta { animation: flashBetaAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
-.flash-gamma { animation: flashGammaAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
-
-/* ==========================================================================
-   6. MEDIA QUERIES (Animations and Mobile Overrides)
-   ========================================================================== */
+5. UTILITIES & ANIMATIONS
+========================================================================== */
 @keyframes borderPulse {
   0% { border-color: rgba(218, 54, 51, 0.4); }
   50% { border-color: rgba(218, 54, 51, 1); }
   100% { border-color: rgba(218, 54, 51, 0.4); }
 }
 
+.flash-user { animation: flashUserAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1); }
 @keyframes flashUserAnim {
   0% { background-color: rgba(88, 166, 255, 0.35); }
   100% { background-color: var(--bg-panel); }
-}
-@keyframes flashAlphaAnim {
-  0% { background-color: rgba(86, 211, 100, 0.35); }
-  100% { background-color: var(--bg-panel); }
-}
-@keyframes flashBetaAnim {
-  0% { background-color: rgba(227, 179, 65, 0.35); }
-  100% { background-color: var(--bg-panel); }
-}
-@keyframes flashGammaAnim {
-  0% { background-color: rgba(248, 81, 73, 0.35); }
-  100% { background-color: var(--bg-panel); }
-}
+   }
