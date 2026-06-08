@@ -1,135 +1,34 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. STATE INITIALIZATION
-    let tasks = [];
-    let isRunning = false;
-    let taskIdCounter = 1;
-    let alphaIntervalId = null;
-    let betaIntervalId = null;
-    let gammaIntervalId = null;
-
-    // 2. DOM REFERENCES
-    const btnToggleSim = document.getElementById('btn-toggle-sim');
-    const btnResetSim = document.getElementById('btn-reset-sim');
-    const btnAddTask = document.getElementById('btn-add-task');
-    const btnInjectChaos = document.getElementById('btn-inject-chaos');
-    const statusText = document.getElementById('simulation-status-text');
-    const simButtonText = document.getElementById('sim-button-text');
-    const logStream = document.getElementById("log-stream-container");
-
-    const containers = {
-        BACKLOG: document.getElementById('container-backlog'),
-        IN_PROGRESS: document.getElementById('container-in-progress'),
-        REVIEW: document.getElementById('container-review'),
-        DONE: document.getElementById('container-done')
+/**
+ * main.js
+ * Frontend Layout Integration Rules Enforcement
+ */
+window.addEventListener('DOMContentLoaded', () => {
+    // Basic interaction handling for navigation scrolling behaviors
+    const setupSmoothScrolling = () => {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     };
 
-    const badges = {
-        BACKLOG: document.getElementById('badge-backlog'),
-        IN_PROGRESS: document.getElementById('badge-in-progress'),
-        REVIEW: document.getElementById('badge-review'),
-        DONE: document.getElementById('badge-done')
-    };
-
-    // 3. CORE FUNCTIONS
-    function log(actor, msg) {
-        const div = document.createElement("div");
-        div.className = `log-card ${actor.toLowerCase()}-log`;
-        div.textContent = `[${actor}] ${msg}`;
-        logStream.appendChild(div);
-        logStream.scrollTop = logStream.scrollHeight;
-    }
-
-    function render() {
-        Object.values(containers).forEach(c => c.innerHTML = "");
-        const counts = { BACKLOG: 0, IN_PROGRESS: 0, REVIEW: 0, DONE: 0 };
-
-        tasks.forEach(t => {
-            counts[t.lane]++;
-            const el = document.createElement("div");
-            el.className = "task-card";
-            el.innerHTML = `<strong>${t.id}</strong><br>${t.title}`;
-            containers[t.lane].appendChild(el);
-        });
-
-        Object.keys(badges).forEach(k => {
-            badges[k].textContent = `[${counts[k]}]`;
-        });
-    }
-
-    function alpha() {
-        const t = tasks[Math.floor(Math.random() * tasks.length)];
-        if (!t) return;
-        if (t.lane === "BACKLOG") t.lane = "IN_PROGRESS";
-        else if (t.lane === "IN_PROGRESS") t.lane = "REVIEW";
-        else if (t.lane === "REVIEW") t.lane = "DONE";
-        t.version++;
-        render();
-    }
-
-    function beta() {
-        tasks.forEach(t => {
-            if (t.lane === "REVIEW" && t.version % 2 === 1) {
-                t.lane = "IN_PROGRESS";
+    // Accessibility structure configuration verification
+    const initAccessibilityHooks = () => {
+        const interactiveButtons = document.querySelectorAll('.btn, .select-dropdown, .input-field');
+        interactiveButtons.forEach(element => {
+            if (!element.hasAttribute('tabindex')) {
+                element.setAttribute('tabindex', '0');
             }
         });
-        render();
-    }
+    };
 
-    function gamma() {
-        const t = tasks[Math.floor(Math.random() * tasks.length)];
-        if (!t) return;
-        const lanes = ["BACKLOG", "IN_PROGRESS", "REVIEW", "DONE"];
-        t.lane = lanes[Math.floor(Math.random() * lanes.length)];
-        render();
-    }
-
-    // 4. EVENT LISTENERS
-    btnInjectChaos?.addEventListener("click", () => {
-        log("USER", "⚡ CHAOS MODE INJECTED");
-        for (let i = 0; i < 5; i++) {
-            tasks.push({
-                id: `CHAOS-${Date.now()}-${i}`,
-                title: "CHAOS LOAD",
-                lane: "BACKLOG",
-                version: 1,
-                timestamp: Date.now()
-            });
-        }
-        render();
-    });
-
-    btnToggleSim?.addEventListener("click", () => {
-        if (!isRunning) {
-            isRunning = true;
-            statusText.textContent = "STATUS: RUNNING";
-            simButtonText.textContent = "STOP";
-            alphaIntervalId = setInterval(alpha, 2000);
-            betaIntervalId = setInterval(beta, 3500);
-            gammaIntervalId = setInterval(gamma, 5000);
-            log("USER", "SIM STARTED");
-        } else {
-            isRunning = false;
-            statusText.textContent = "STATUS: STOPPED";
-            simButtonText.textContent = "START";
-            clearInterval(alphaIntervalId);
-            clearInterval(betaIntervalId);
-            clearInterval(gammaIntervalId);
-            log("USER", "SIM STOPPED");
-        }
-    });
-
-    btnAddTask?.addEventListener("click", () => {
-        tasks.push({
-            id: `TASK-${taskIdCounter++}`,
-            title: "USER TASK",
-            lane: "BACKLOG",
-            version: 1,
-            timestamp: Date.now()
-        });
-        render();
-    });
-
-    btnResetSim?.addEventListener("click", () => location.reload());
-
-    log("USER", "SYSTEM READY");
+    // Initialize layout scripts
+    setupSmoothScrolling();
+    initAccessibilityHooks();
 });
