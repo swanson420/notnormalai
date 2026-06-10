@@ -1,421 +1,302 @@
-/* ==========================================================================
-   1. VARIABLES
-   ========================================================================== */
+/* styles.css */
 :root {
-    --bg-main: #0a0b10;
-    --bg-panel: #16192b;
-    --bg-card: #121420;
-    --border: #262b4c;
-    
-    --text-main: #f1f5f9;
-    --text-muted: #64748b;
-    
-    --accent-alpha: #3b82f6;
-    --accent-beta: #10b981;
-    --accent-gamma: #ec4899;
-    --accent-user: #eab308;
-    
-    --status-backlog: #6366f1;
-    --status-progress: #0ea5e9;
-    --status-review: #f59e0b;
-    --status-done: #10b981;
-    
-    --font-system: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  /* Color Architecture Rule (60-30-10)[span_6](start_span)[span_6](end_span)[span_7](start_span)[span_7](end_span) */
+  --bg-primary: #121214;      /* 60% Dominant Canvas Base[span_8](start_span)[span_8](end_span)[span_9](start_span)[span_9](end_span) */
+  --bg-secondary: #1a1a1e;    /* 60% Dominant Canvas Base[span_10](start_span)[span_10](end_span)[span_11](start_span)[span_11](end_span) */
+  --border-neutral: #2e2e33;  /* 30% Structural Accents[span_12](start_span)[span_12](end_span)[span_13](start_span)[span_13](end_span) */
+  --text-main: #e4e4e7;       /* 30% Structural Accents[span_14](start_span)[span_14](end_span)[span_15](start_span)[span_15](end_span) */
+  --text-muted: #a1a1aa;      /* 30% Structural Accents[span_16](start_span)[span_16](end_span)[span_17](start_span)[span_17](end_span) */
+  
+  /* 10% Interactive High-Contrast Signatures[span_18](start_span)[span_18](end_span)[span_19](start_span)[span_19](end_span) */
+  --color-alpha: #10b981;     /* Cyber Green[span_20](start_span)[span_20](end_span)[span_21](start_span)[span_21](end_span) */
+  --color-beta: #f59e0b;      /* Warning Amber[span_22](start_span)[span_22](end_span)[span_23](start_span)[span_23](end_span) */
+  --color-gamma: #a855f7;     /* Neon Purple[span_24](start_span)[span_24](end_span)[span_25](start_span)[span_25](end_span) */
+  
+  /* Column Background Tints[span_26](start_span)[span_26](end_span)[span_27](start_span)[span_27](end_span) */
+  --tint-backlog: #27272a;
+  --tint-in-progress: #1e293b;
+  --tint-review: #2d2214;
+  --tint-done: #14271f;
 }
 
-/* ==========================================================================
-   2. RESET/BASE
-   ========================================================================== */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    font-family: var(--font-system);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  overflow: hidden; /* Zero page-level scrolling constraint[span_28](start_span)[span_28](end_span)[span_29](start_span)[span_29](end_span) */
 }
 
-/* ==========================================================================
-   3. LAYOUT SYSTEM
-   ========================================================================== */
-.header-navigation {
-    background-color: var(--bg-panel);
-    border-bottom: 2px solid var(--border);
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 62px;
+/* Master Grid Structure[span_30](start_span)[span_30](end_span)[span_31](start_span)[span_31](end_span) */
+.viewport-container {
+  display: grid;
+  grid-template-columns: 20vw 60vw 20vw; /* Strict layout width configuration[span_32](start_span)[span_32](end_span)[span_33](start_span)[span_33](end_span) */
+  width: 100vw;
+  height: 100vh; /* Fixed height layout constraint[span_34](start_span)[span_34](end_span)[span_35](start_span)[span_35](end_span) */
+  overflow: hidden;
 }
 
-.main-layout {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 320px 1fr 360px;
-    height: calc(100vh - 62px);
-    overflow: hidden;
-}
-
-.panel {
-    background-color: var(--bg-panel);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-}
-
+/* Left Panel Elements[span_36](start_span)[span_36](end_span)[span_37](start_span)[span_37](end_span) */
 .left-panel {
-    border-right: 2px solid var(--border);
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-neutral);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 24px;
 }
 
-.right-panel {
-    border-left: 2px solid var(--border);
+.control-group, .action-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.board-container {
-    background-color: var(--bg-main);
-    padding: 1.5rem;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    height: 100%;
-    overflow-x: auto;
+/* Fitts's Law Button Target Dimensions[span_38](start_span)[span_38](end_span)[span_39](start_span)[span_39](end_span) */
+.control-btn {
+  width: 100%;
+  min-height: 44px;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  border: 1px solid var(--border-neutral);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* ==========================================================================
-   4. COMPONENTS
-   ========================================================================== */
-/* Header Elements */
-.logo-area {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+.control-btn:hover {
+  background-color: var(--border-neutral);
 }
 
-.logo-badge {
-    background: linear-gradient(135deg, var(--accent-alpha), var(--accent-gamma));
-    color: #ffffff;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-weight: 800;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
+.control-btn:focus-visible {
+  outline: 2px solid var(--text-main);
+  outline-offset: -2px;
 }
 
-.system-status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+/* Active Button State Variant Implementations[span_40](start_span)[span_40](end_span)[span_41](start_span)[span_41](end_span) */
+#start-sim-btn.active {
+  border-color: var(--color-alpha);
+  animation: pulse-green 2s infinite ease-in-out;
 }
 
-.status-indicator {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #ef4444;
+#stop-sim-btn.active {
+  border-color: var(--color-beta);
+  background-color: rgba(245, 158, 11, 0.1);
 }
 
-/* Panel Layout Structures */
-.panel-header {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    font-size: 0.95rem;
+#inject-chaos-btn {
+  border: 2px solid var(--color-gamma);
 }
 
-.panel-content {
-    padding: 1.25rem;
-    overflow-y: auto;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+#reset-system-btn {
+  border-color: var(--border-neutral);
+  color: var(--text-muted);
 }
 
-/* Forms & Controls */
-.control-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+/* Add Task Input Form Component[span_42](start_span)[span_42](end_span)[span_43](start_span)[span_43](end_span) */
+.inline-input-container {
+  width: 100%;
 }
 
-.control-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
+.inline-input-container input {
+  width: 100%;
+  min-height: 36px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-neutral);
+  color: var(--text-main);
+  padding: 0 8px;
+  font-size: 14px;
+  border-radius: 4px;
 }
 
-.input-field {
-    background-color: var(--bg-main);
-    border: 1px solid var(--border);
-    color: var(--text-main);
-    padding: 0.65rem 1rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    outline: none;
+.inline-input-container input:focus {
+  outline: 1px solid var(--text-muted);
 }
 
-.select-dropdown {
-    background-color: var(--bg-main);
-    border: 1px solid var(--border);
-    color: var(--text-main);
-    padding: 0.65rem 1rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    outline: none;
+.hidden {
+  display: none !important;
 }
 
-/* Interactive Buttons */
-.btn {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text-main);
-    padding: 0.65rem 1rem;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+/* Center Panel Column Elements[span_44](start_span)[span_44](end_span)[span_45](start_span)[span_45](end_span) */
+.center-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Four equal-width lanes[span_46](start_span)[span_46](end_span)[span_47](start_span)[span_47](end_span) */
+  height: 100%;
+  background-color: var(--bg-primary);
 }
 
-.btn-primary {
-    background-color: var(--accent-alpha);
-    border-color: transparent;
+.kanban-column {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-neutral);
+  height: 100%;
+  overflow: hidden;
 }
 
-.btn-danger {
-    background-color: #991b1b;
-    border-color: transparent;
-}
-
-.btn-chaos {
-    background: linear-gradient(135deg, #7c3aed, var(--accent-gamma));
-    border: none;
-    color: #ffffff;
-    font-weight: 700;
-}
-
-.btn-group-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-}
-
-/* Configuration Displays */
-.agent-config-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0.85rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.agent-config-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 4px;
-}
-
-.agent-alpha-card::before { background-color: var(--accent-alpha); }
-.agent-beta-card::before { background-color: var(--accent-beta); }
-.agent-gamma-card::before { background-color: var(--accent-gamma); }
-
-.agent-config-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.85rem;
-    font-weight: 700;
-}
-
-.agent-meta {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
-/* Board Columns */
-.board-column {
-    background-color: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+.kanban-column:last-child {
+  border-right: none;
 }
 
 .column-header {
-    padding: 1rem;
-    border-bottom: 2px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  height: 56px;
+  border-bottom: 1px solid var(--border-neutral);
 }
 
-.column-header .count-badge {
-    background-color: var(--bg-main);
-    border: 1px solid var(--border);
-    padding: 0.15rem 0.4rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    color: var(--text-muted);
+.column-header h2 {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.column-backlog { border-top: 3px solid var(--status-backlog); }
-.column-progress { border-top: 3px solid var(--status-progress); }
-.column-review { border-top: 3px solid var(--status-review); }
-.column-done { border-top: 3px solid var(--status-done); }
-
-.column-cards-container {
-    padding: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    flex: 1;
-    overflow-y: auto;
+.column-counter {
+  font-size: 12px;
+  font-weight: 700;
+  background-color: var(--bg-primary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border-neutral);
 }
 
-/* Cards System */
+/* Lane Background Tint Bindings[span_48](start_span)[span_48](end_span)[span_49](start_span)[span_49](end_span) */
+.lane-backlog .column-header { background-color: var(--tint-backlog); }
+.lane-in-progress .column-header { background-color: var(--tint-in-progress); }
+.lane-review .column-header { background-color: var(--tint-review); }
+.lane-done .column-header { background-color: var(--tint-done); }
+
+/* Overflow-y Tracking Display Track[span_50](start_span)[span_50](end_span)[span_51](start_span)[span_51](end_span) */
+.card-display-track {
+  flex-grow: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Task Card Structural Component System[span_52](start_span)[span_52](end_span)[span_53](start_span)[span_53](end_span) */
 .task-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-    position: relative;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-neutral);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  user-select: none;
 }
 
-.task-card-id {
-    font-family: monospace;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.task-card-version {
-    background-color: var(--bg-main);
-    padding: 0.1rem 0.3rem;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    font-size: 0.7rem;
+.task-id {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
 }
 
-.task-card-title {
-    font-size: 0.9rem;
-    font-weight: 500;
-    line-height: 1.4;
-    word-break: break-word;
+.card-body {
+  font-size: 14px;
+  color: var(--text-main);
+  text-align: center;
+  padding: 4px 0;
 }
 
-.task-card-meta {
-    border-top: 1px solid var(--border);
-    padding-top: 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.7rem;
-    color: var(--text-muted);
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
 }
 
-/* Logging Outputs */
-.log-stream {
-    background-color: var(--bg-main);
-    font-family: monospace;
-    font-size: 0.8rem;
-    padding: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    flex: 1;
-    overflow-y: auto;
+.owner-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+/* Agent Styling Contracts[span_54](start_span)[span_54](end_span)[span_55](start_span)[span_55](end_span) */
+.badge-alpha { color: var(--color-alpha); border-color: rgba(16, 185, 129, 0.3); background-color: rgba(16, 185, 129, 0.05); }
+.badge-beta { color: var(--color-beta); border-color: rgba(245, 158, 11, 0.3); background-color: rgba(245, 158, 11, 0.05); }
+.badge-gamma { color: var(--color-gamma); border-color: rgba(168, 85, 247, 0.3); background-color: rgba(168, 85, 247, 0.05); }
+.badge-none { color: var(--text-muted); border-color: var(--border-neutral); }
+
+/* Right Panel System Console Telemetry Track[span_56](start_span)[span_56](end_span)[span_57](start_span)[span_57](end_span) */
+.right-panel {
+  background-color: var(--bg-secondary);
+  border-left: 1px solid var(--border-neutral);
+  height: 100%;
+  overflow: hidden;
+}
+
+.telemetry-log-console {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  font-family: monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .log-entry {
-    line-height: 1.4;
-    padding: 0.25rem;
-    border-radius: 4px;
-    border-left: 2px solid transparent;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
-.log-entry-timestamp {
-    color: #475569;
-    margin-right: 0.5rem;
+.log-time { color: var(--text-muted); }
+.log-alpha { color: var(--color-alpha); }
+.log-beta { color: var(--color-beta); }
+.log-gamma { color: var(--color-gamma); }
+.log-system { color: var(--text-main); font-weight: bold; }
+
+/* Micro-Flash CSS Keyframe Animation Rules[span_58](start_span)[span_58](end_span)[span_59](start_span)[span_59](end_span) */
+@keyframes flash-alpha {
+  0% { background-color: rgba(16, 185, 129, 0.4); border-color: var(--color-alpha); }
+  100% { background-color: var(--bg-secondary); border-color: var(--border-neutral); }
 }
 
-.log-entry .actor-badge {
-    padding: 0.05rem 0.25rem;
-    border-radius: 3px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    margin-right: 0.4rem;
+@keyframes flash-beta {
+  0% { background-color: rgba(245, 158, 11, 0.4); border-color: var(--color-beta); }
+  100% { background-color: var(--bg-secondary); border-color: var(--border-neutral); }
 }
 
-.log-msg-text {
-    color: #cbd5e1;
+@keyframes flash-gamma {
+  0% { background-color: rgba(168, 85, 247, 0.4); border-color: var(--color-gamma); }
+  100% { background-color: var(--bg-secondary); border-color: var(--border-neutral); }
 }
 
-/* ==========================================================================
-   5. UTILITIES
-   ========================================================================== */
-.u-text-alpha { color: var(--accent-alpha); }
-.u-text-beta { color: var(--accent-beta); }
-.u-text-gamma { color: var(--accent-gamma); }
-.u-text-user { color: var(--accent-user); }
-
-/* ==========================================================================
-   6. MEDIA QUERIES
-   ========================================================================== */
-@media (max-width: 1024px) {
-    .main-layout {
-        grid-template-columns: 280px 1fr;
-    }
-    .right-panel {
-        display: none;
-    }
+@keyframes pulse-green {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
-@media (max-width: 768px) {
-    .main-layout {
-        grid-template-columns: 1fr;
-    }
-    .left-panel {
-        display: none;
-    }
-    .board-container {
-        grid-template-columns: 1fr;
-    }
-}
+.flash-alpha { animation: flash-alpha 300ms cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.flash-beta { animation: flash-beta 300ms cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.flash-gamma { animation: flash-gamma 300ms cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+      
